@@ -5,10 +5,114 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Calistenia em Casa</title>
   <style>
-    /* (Seu CSS continua o mesmo, então removi daqui por brevidade) */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+    header, footer {
+      background-color: #111;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+    }
+    nav {
+      background: #222;
+      text-align: center;
+      padding: 0.5rem;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      display: inline-block;
+    }
+    .hero {
+      background-color: #e5e5e5;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .section {
+      padding: 2rem 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    .product, .sobre, .blog, .contato {
+      background: #fff;
+      border-radius: 8px;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .cta {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background: #28a745;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    form label {
+      display: block;
+      margin-top: 1rem;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #mensagem-obrigado {
+      display: none;
+      text-align: center;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+    }
+    #mensagem-obrigado h1 {
+      color: #28a745;
+    }
+    #mensagem-obrigado a {
+      display: inline-block;
+      margin-top: 1rem;
+      color: white;
+      background: #28a745;
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 5px;
+    }
+    @media (max-width: 768px) {
+      nav a {
+        display: block;
+        margin: 5px 0;
+      }
+    }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Calistenia em Casa</h1>
     <p>Transforme seu corpo usando apenas o peso dele</p>
@@ -40,7 +144,6 @@
 
   <div class="section" id="treinos">
     <h2>Treino Rápido para Iniciantes</h2>
-    <p>3 Séries de cada:</p>
     <ul>
       <li>10 Flexões inclinadas</li>
       <li>15 Agachamentos</li>
@@ -73,7 +176,7 @@
 
   <div class="section contato" id="contato">
     <h2>Contato</h2>
-    <form action="https://formsubmit.co/thiagoemanuelgames9@gmail.com" method="POST">
+    <form id="formulario-contato" action="https://formsubmit.co/thiagoemanuelgames9@gmail.com" method="POST">
       <label for="nome">Nome</label>
       <input type="text" id="nome" name="name" placeholder="Seu nome" required>
 
@@ -83,65 +186,49 @@
       <label for="mensagem">Mensagem</label>
       <textarea id="mensagem" name="message" rows="4" placeholder="Escreva sua mensagem..." required></textarea>
 
-      <!-- Proteções extras e personalizações -->
       <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_next" value="https://seusite.github.io/obrigado.html">
+      <input type="hidden" name="_next" value="#">
 
       <button type="submit">Enviar</button>
     </form>
   </div>
 
+  <div id="mensagem-obrigado">
+    <h1>Obrigado pelo contato!</h1>
+    <p>Recebi sua mensagem e entrarei em contato o mais rápido possível.</p>
+    <a href="#topo" onclick="voltarInicio()">Voltar ao início</a>
+  </div>
+
   <footer>
     <p>&copy; 2025 Calistenia em Casa. Todos os direitos reservados.</p>
   </footer>
-</body>
-</html>
 
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Obrigado pelo Contato</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
+  <script>
+    const form = document.getElementById("formulario-contato");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      fetch(form.action, {
+        method: "POST",
+        body: data,
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(() => {
+        form.style.display = "none";
+        document.getElementById("mensagem-obrigado").style.display = "block";
+      }).catch((error) => {
+        alert("Ocorreu um erro. Tente novamente mais tarde.");
+      });
+    });
+
+    function voltarInicio() {
+      document.getElementById("mensagem-obrigado").style.display = "none";
+      form.style.display = "block";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    .mensagem {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      max-width: 400px;
-    }
-    h1 {
-      color: #28a745;
-    }
-    a {
-      display: inline-block;
-      margin-top: 1rem;
-      color: white;
-      background: #28a745;
-      text-decoration: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 5px;
-    }
-  </style>
-</head>
-<body>
-  <div class="mensagem">
-    <h1>Obrigado pelo contato!</h1>
-    <p>Recebi sua mensagem e entrarei em contato o mais rápido possível.</p>
-    <a href="index.html">Voltar ao início</a>
-  </div>
+  </script>
+
 </body>
 </html>
